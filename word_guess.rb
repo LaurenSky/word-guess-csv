@@ -1,7 +1,7 @@
 require 'csv'
 
 class WordGuess
-  def initialize(debug = true)
+  def initialize(debug = false)
     # are we in debug mode?
     @debug = debug
 
@@ -13,15 +13,8 @@ class WordGuess
       #     machiavellian prestidigitation plenipotentiary quattuordecillion
       #     magnanimous unencumbered bioluminescent circumlocution
       #   )
-    @words = {
-        "e" => [],
-        "m" => [],
-        "h" => []
-    }
+    @words = csv_words
 
-    def load_words (mode, array)
-      
-    end
 
     #puts @words[:e]
     # players attempts allowed by difficulty
@@ -50,6 +43,14 @@ class WordGuess
 
     # start the first turn
     play_turn
+  end
+
+  def csv_words
+    words = {}
+    CSV.read('words.csv', 'r').each do |line|
+      words[line[0]] = line[1..-1]   # or words[line[0]] = line[1...line.length-1]
+    end
+    return words
   end
 
   def play_turn
